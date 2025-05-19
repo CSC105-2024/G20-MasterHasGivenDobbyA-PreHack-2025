@@ -93,7 +93,7 @@ const LogIn = () => {
           >
             <div className="w-full flex items-center justify-center gap-2 text-center py-2 px-4 rounded-xl text-black bg-white font-bold shadow-md">
               <div className="w-6 h-6 md:w-8 md:h-8 text-2xl items-center justify-center flex">
-                {loginStatus === "success" ? <MdOutlineHowToReg /> : <BsPersonXFill />}
+                {loginStatus === "success" ? <MdOutlineHowToReg className="text-green-500" /> : <BsPersonXFill className="text-red-500 "/>}
               
               </div>
               <span className="text-sm md:text-base">
@@ -111,14 +111,14 @@ const LogIn = () => {
 
         <div className="w-full p-6 bg-white rounded-3xl shadow-lg">
           <div className="text-start mb-6">
-            <div className="text-black text-4xl font-bold font-['Poppins']">
+            <div className="text-black text-4xl font-bold">
               Log In
             </div>
           </div>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-xl text-black font-normal font-['Poppins']">
+              <label className="block text-xl text-black font-normal ">
                 Username
               </label>
               <input
@@ -137,7 +137,7 @@ const LogIn = () => {
             </div>
 
             <div className="mb-6">
-              <label className="block text-xl text-black font-normal font-['Poppins']">
+              <label className="block text-xl text-black font-normal ">
                 Password
               </label>
               <input
