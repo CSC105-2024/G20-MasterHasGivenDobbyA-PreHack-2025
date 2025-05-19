@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
 @theme {
-    --font-Libre_Caslon: "Libre_Caslon_";
+    --font-libre-caslon-text: "\"Libre Caslon Text\", serif"
 }
