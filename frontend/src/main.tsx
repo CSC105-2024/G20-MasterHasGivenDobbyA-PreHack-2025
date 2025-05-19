@@ -6,6 +6,7 @@ import Home from './pages/Home.tsx';
 import LogIn from './pages/LogIn.tsx';
 import Detail from './pages/Detail.tsx';
 import AddNewSong from './pages/AddNewSong.tsx';
+import '../index.css'
 
 const router = createBrowserRouter([
   {
