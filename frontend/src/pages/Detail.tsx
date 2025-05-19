@@ -1,6 +1,80 @@
 import React from "react";
 import Nav from "../components/NavBar";
+import { useState } from "react";
+
 export function Detail() {
+  const [lyrics, setLyrics] =
+    useState(`Now he's thinkin' 'bout me every night, oh
+Is it that sweet? I guess so
+Say you can't sleep, baby, I know
+That's that me espresso
+Move it up, down, left, right, oh
+Switch it up like Nintendo
+Say you can't sleep, baby, I know
+That's that me espresso
+I can't relate to desperation
+My give-a-fucks are on vacation
+And I got this one boy, and he won't stop callin'
+When they act this way, I know I got 'em
+Too bad your ex don't do it for ya
+Walked in and dream-came-trued it for ya
+Soft skin and I perfumed it for ya
+(Yes) I know, I Mountain Dew it for ya
+(Yes) that morning coffee, brewed it for ya
+(Yes) one touch and I brand-newed it for ya (oh)
+Now he's thinkin' 'bout me every night, oh
+Is it that sweet? I guess so
+Say you can't sleep, baby, I know
+That's that me espresso
+Move it up, down, left, right, oh
+Switch it up like Nintendo
+Say you can't sleep, baby, I know
+That's that me espresso
+Holy shit
+Is it that sweet? I guess so
+I'm working late, 'cause I'm a singer
+Oh, he looks so cute wrapped 'round my finger
+My twisted humor makes him laugh so often
+My honey bee, come and get this pollen
+Too bad your ex don't do it for ya
+Walked in and dream-came-trued it for ya
+Soft skin and I perfumed it for ya
+(Yes) I know, I Mountain Dew it for ya
+(Yes) that morning coffee, brewed it for ya
+(Yes) one touch and I brand-newed it for ya (stupid)
+Now he's thinkin' 'bout me every night, oh
+Is it that sweet? I guess so
+Say you can't sleep, baby, I know
+That's that me espresso
+Move it up, down, left, right, oh
+Switch it up like Nintendo
+Say you can't sleep, baby, I know
+That's that me espresso
+Thinkin' 'bout me every night, oh
+Is it that sweet? I guess so (yes)
+Say you can't sleep, baby, I know
+That's that me espresso (yes)
+Move it up, down, left, right, oh
+Switch it up like Nintendo (yes)
+Say you can't sleep, baby, I know
+That's that me espresso
+Is it that sweet? I guess so, uh
+That's that me espresso`);
+
+const [editedLyrics, setEditedLyrics] = useState(lyrics);
+const handleSave = () => {
+  setLyrics(editedLyrics);
+  localStorage.setItem("lyrics", editedLyrics); 
+  console.log("✅ Lyrics saved:", editedLyrics);
+};
+
+const handleDelete = () => {
+  setLyrics("");
+  setEditedLyrics("");
+  console.log("🗑️ Lyrics deleted.");
+
+};
+
   return (
     <>
       <div className="h-screen flex flex-row font-libre-caslon-text">
@@ -41,11 +115,17 @@ export function Detail() {
                     />
                   </div>
 
-                  <button className=" text-purple-900 flex items-center justify-center bg-zinc-400 w-28 h-[50px] px-8 py-3.5 rounded-2xl text-2xl">
+                  <button
+                    onClick={handleDelete}
+                    className=" text-purple-900 flex items-center justify-center bg-zinc-400 w-28 h-[50px] px-8 py-3.5 rounded-2xl text-2xl"
+                  >
                     Delete
                   </button>
-                  <button className="text-white flex items-center bg-purple-900 w-28 h-[50px] px-8 py-3.5 rounded-2xl text-2xl">
-                    Edit
+                  <button
+                    className="text-white flex items-center bg-purple-900 w-28 h-[50px] px-8 py-3.5 rounded-2xl hover:bg-gray-200 text-2xl"
+                    onClick={handleSave}
+                  >
+                    Save
                   </button>
                 </div>
               </div>
@@ -53,6 +133,8 @@ export function Detail() {
               <div className="Lyrics bg-white rounded-3xl h-[608px] w-[916px] overflow-y-auto p-6 mt-6">
                 <div className="flex justify-center items-center w-full h-full">
                   <textarea
+                    value={editedLyrics}
+                    onChange={(e) => setEditedLyrics(e.target.value)}
                     className="w-[750px] h-full resize-none bg-transparent outline-none text-3xl leading-relaxed font-['Libre_Caslon_Text'] p-2 whitespace-pre-wrap"
                     placeholder="Type your lyrics here..."
                     defaultValue={`Now he's thinkin' 'bout me every night, oh
