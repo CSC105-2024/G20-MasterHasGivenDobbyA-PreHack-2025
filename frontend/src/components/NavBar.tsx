@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FiHome } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,9 +6,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 export default function NavBar() {
   const navigate = useNavigate();
   const [dropdownProfileOpen, setDropdownProfileOpen] = useState(false);
-  // const { isLogin, setIsLogin } = useContext(LoginContext);
   const handleLogout = () => {
-    
     navigate("/login");
   };
   return (
