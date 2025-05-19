@@ -3,20 +3,23 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-      "frontend": "npm --prefix frontend run dev",
-      "backend": "npm --prefix backend run dev",
-      "dev": "npm run frontend & npm run backend"
+        "frontend": "npm --prefix frontend run dev",
+        "backend": "npm --prefix backend run dev",
+        "dev": "npm run frontend & npm run backend"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/CSC105-2024/G20-GrabYourBook.git"
+        "type": "git",
+        "url": "git+https://github.com/CSC105-2024/G20-GrabYourBook.git"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "bugs": {
-      "url": "https://github.com/CSC105-2024/G20-GrabYourBook/issues"
+        "url": "https://github.com/CSC105-2024/G20-GrabYourBook/issues"
     },
     "homepage": "https://github.com/CSC105-2024/G20-GrabYourBook#readme",
-    "description": ""
-  }  
+    "description": "",
+    "dependencies": {
+        "react-icon": "^1.0.0"
+    }
+}

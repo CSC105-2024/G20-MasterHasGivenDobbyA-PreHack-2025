@@ -7,6 +7,7 @@ import LogIn from './pages/LogIn.tsx';
 import Detail from './pages/Detail.tsx';
 import AddNewSong from './pages/AddNewSong.tsx';
 import "./index.css";
+import '../index.css'
 
 const router = createBrowserRouter([
   {
