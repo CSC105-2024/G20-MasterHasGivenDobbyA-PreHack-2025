@@ -1,5 +1,3 @@
-import React from 'react'
-
 function AddNewSong() {
   return (
     <div>
