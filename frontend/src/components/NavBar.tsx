@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FiHome } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,7 +6,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 export default function NavBar() {
   const navigate = useNavigate();
   const [dropdownProfileOpen, setDropdownProfileOpen] = useState(false);
+  // const { isLogin, setIsLogin } = useContext(LoginContext);
   const handleLogout = () => {
+    
     navigate("/login");
   };
   return (
@@ -23,12 +25,13 @@ export default function NavBar() {
       </button>
       {dropdownProfileOpen && (
         <div className="absolute mt-22 right-1 md:left-16 md:mb-4 w-40 md:bottom-0 bg-white shadow-lg rounded-lg overflow-hidden z-[9999]">
-        <button
-          onClick={handleLogout}
-          className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
-        >
-          Log Out
-        </button></div>
+          <button
+            onClick={handleLogout}
+            className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+          >
+            Log Out
+          </button>
+        </div>
       )}
     </nav>
   );
