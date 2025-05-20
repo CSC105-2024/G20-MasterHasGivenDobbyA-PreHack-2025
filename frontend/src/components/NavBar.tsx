@@ -23,12 +23,13 @@ export default function NavBar() {
       </button>
       {dropdownProfileOpen && (
         <div className="absolute mt-22 right-1 md:left-16 md:mb-4 w-40 md:bottom-0 bg-white shadow-lg rounded-lg overflow-hidden z-[9999]">
-        <button
-          onClick={handleLogout}
-          className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
-        >
-          Log Out
-        </button></div>
+          <button
+            onClick={handleLogout}
+            className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+          >
+            Log Out
+          </button>
+        </div>
       )}
     </nav>
   );

@@ -1,4 +1,3 @@
-import React from "react";
 import Nav from "../components/NavBar";
 import { useState, useEffect } from "react";
 
