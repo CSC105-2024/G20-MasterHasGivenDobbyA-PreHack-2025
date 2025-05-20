@@ -78,7 +78,7 @@ const LogIn = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-[#262626] overflow-hidden relative flex justify-center items-center">
+    <div className="w-full h-screen bg-[#262626] overflow-hidden relative flex justify-center items-center font-[libre-caslon-text]">
       
       <div className="z-10 flex flex-col items-center w-full max-w-md px-4">
         {loginStatus && (
