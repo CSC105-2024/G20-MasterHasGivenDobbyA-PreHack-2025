@@ -1,10 +1,9 @@
 import React from "react";
 import Nav from "../components/NavBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Detail() {
-  const [lyrics, setLyrics] =
-    useState(`Now he's thinkin' 'bout me every night, oh
+  const initialLyrics = `Now he's thinkin' 'bout me every night, oh
 Is it that sweet? I guess so
 Say you can't sleep, baby, I know
 That's that me espresso
@@ -59,21 +58,30 @@ Switch it up like Nintendo (yes)
 Say you can't sleep, baby, I know
 That's that me espresso
 Is it that sweet? I guess so, uh
-That's that me espresso`);
+That's that me espresso`;
 
-const [editedLyrics, setEditedLyrics] = useState(lyrics);
-const handleSave = () => {
-  setLyrics(editedLyrics);
-  localStorage.setItem("lyrics", editedLyrics); 
-  console.log("✅ Lyrics saved:", editedLyrics);
-};
+  const [lyrics, setLyrics] = useState(initialLyrics);
+  const [editedLyrics, setEditedLyrics] = useState(initialLyrics);
+  useEffect(() => {
+    const saved = localStorage.getItem("lyrics");
+    if (saved) {
+      setLyrics(saved);
+      setEditedLyrics(saved);
+    }
+  }, []);
 
-const handleDelete = () => {
-  setLyrics("");
-  setEditedLyrics("");
-  console.log("🗑️ Lyrics deleted.");
+  const handleSave = () => {
+    setLyrics(editedLyrics);
+    localStorage.setItem("lyrics", editedLyrics);
+    console.log("✅ Saved to localStorage:", editedLyrics);
+  };
 
-};
+  const handleDelete = () => {
+    setLyrics("");
+    setEditedLyrics("");
+    localStorage.removeItem("lyrics");
+    console.log("🗑️ Deleted from localStorage");
+  };
 
   return (
     <>
@@ -100,17 +108,10 @@ const handleDelete = () => {
 
               <div className="Search song flex justify-center items-center  py-5">
                 <div className=" flex items-start gap-4">
-                  <div className="w-80 max-w-[1000px] h-[50px] bg-white backdrop-blur-md rounded-lg shadow-md outline-[0.5px] outline-black flex items-center px-4 ">
+                  <div className="w-165 max-w-[1000px] h-[50px] bg-white backdrop-blur-md rounded-lg shadow-md outline-[0.5px] outline-black flex items-center px-4 ">
                     <input
                       type="search"
                       placeholder="Search for Name"
-                      className="w-full h-full bg-transparent focus:outline-none"
-                    />
-                  </div>
-                  <div className="w-80 max-w-[1000px] h-[50px] bg-white backdrop-blur-md rounded-lg shadow-md outline-[0.5px] outline-black flex items-center px-4 ">
-                    <input
-                      type="search"
-                      placeholder="Search for Author"
                       className="w-full h-full bg-transparent focus:outline-none"
                     />
                   </div>
@@ -137,62 +138,6 @@ const handleDelete = () => {
                     onChange={(e) => setEditedLyrics(e.target.value)}
                     className="w-[750px] h-full resize-none bg-transparent outline-none text-3xl leading-relaxed font-['Libre_Caslon_Text'] p-2 whitespace-pre-wrap"
                     placeholder="Type your lyrics here..."
-                    defaultValue={`Now he's thinkin' 'bout me every night, oh
-Is it that sweet? I guess so
-Say you can't sleep, baby, I know
-That's that me espresso
-Move it up, down, left, right, oh
-Switch it up like Nintendo
-Say you can't sleep, baby, I know
-That's that me espresso
-I can't relate to desperation
-My give-a-fucks are on vacation
-And I got this one boy, and he won't stop callin'
-When they act this way, I know I got 'em
-Too bad your ex don't do it for ya
-Walked in and dream-came-trued it for ya
-Soft skin and I perfumed it for ya
-(Yes) I know, I Mountain Dew it for ya
-(Yes) that morning coffee, brewed it for ya
-(Yes) one touch and I brand-newed it for ya (oh)
-Now he's thinkin' 'bout me every night, oh
-Is it that sweet? I guess so
-Say you can't sleep, baby, I know
-That's that me espresso
-Move it up, down, left, right, oh
-Switch it up like Nintendo
-Say you can't sleep, baby, I know
-That's that me espresso
-Holy shit
-Is it that sweet? I guess so
-I'm working late, 'cause I'm a singer
-Oh, he looks so cute wrapped 'round my finger
-My twisted humor makes him laugh so often
-My honey bee, come and get this pollen
-Too bad your ex don't do it for ya
-Walked in and dream-came-trued it for ya
-Soft skin and I perfumed it for ya
-(Yes) I know, I Mountain Dew it for ya
-(Yes) that morning coffee, brewed it for ya
-(Yes) one touch and I brand-newed it for ya (stupid)
-Now he's thinkin' 'bout me every night, oh
-Is it that sweet? I guess so
-Say you can't sleep, baby, I know
-That's that me espresso
-Move it up, down, left, right, oh
-Switch it up like Nintendo
-Say you can't sleep, baby, I know
-That's that me espresso
-Thinkin' 'bout me every night, oh
-Is it that sweet? I guess so (yes)
-Say you can't sleep, baby, I know
-That's that me espresso (yes)
-Move it up, down, left, right, oh
-Switch it up like Nintendo (yes)
-Say you can't sleep, baby, I know
-That's that me espresso
-Is it that sweet? I guess so, uh
-That's that me espresso`}
                   />
                 </div>
               </div>
