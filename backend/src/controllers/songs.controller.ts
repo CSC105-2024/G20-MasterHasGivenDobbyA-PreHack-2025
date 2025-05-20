@@ -2,7 +2,6 @@ import * as songsModel from '../models/songs.model.ts'
 import type { Context } from 'hono'
 import { ConstructResponse } from '../utils/constructResponse.ts';
 import { db } from '../index.ts';
-import { auth } from 'hono/utils/basic-auth';
 
 export const getAllSongs = async (c: Context) => {
     try {
