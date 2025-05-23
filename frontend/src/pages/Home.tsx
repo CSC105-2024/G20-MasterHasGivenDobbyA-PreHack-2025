@@ -35,8 +35,8 @@ export default function Home() {
     }
     const matched = songList.filter(
       (song) =>
-        song.title.toLowerCase().startsWith(query.toLowerCase()) ||
-        song.artist.toLowerCase().startsWith(query.toLowerCase())
+        song.title.toLowerCase().includes(query.toLowerCase()) ||
+        song.artist.toLowerCase().includes(query.toLowerCase())
     );
     setResult(matched);
   }, [query]);
