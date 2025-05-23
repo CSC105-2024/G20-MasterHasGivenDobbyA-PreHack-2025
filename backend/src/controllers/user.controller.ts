@@ -81,7 +81,7 @@ export const getUserById = async (c: Context) => {
     }
 }
 
-export const getUserByUserame = async (c: Context) => {
+export const getUserByUsername = async (c: Context) => {
     try {
         const param = c.req.query("username") || '';
 

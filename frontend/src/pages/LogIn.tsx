@@ -3,20 +3,17 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineHowToReg } from "react-icons/md";
 import { BsPersonXFill } from "react-icons/bs";
+import { loginUser } from "../api/userApi";
 
 const userSchema = z.object({
   username: z.string().min(1, "Username is required"),
   password: z.string().min(1, "Password is required"),
 });
 
-const correctUsername = "user12345";
-const correctPassword = "password123";
-
 const LogIn = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
   const [loginStatus, setLoginStatus] = useState("");
   const [shakeTrigger, setShakeTrigger] = useState(false);
 
@@ -46,40 +43,46 @@ const LogIn = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrors({ username: "", password: "" });
-    const result = userSchema.safeParse(formData);
+    setErrors({});
 
+    const result = userSchema.safeParse(formData);
     if (!formData.username.trim() && !formData.password.trim()) {
       setLoginStatus("empty");
       triggerShake();
       return;
     }
 
-    if (result.success) {
-      if (
-        formData.username === correctUsername &&
-        formData.password === correctPassword
-      ) {
-        setLoginStatus("success");
-      } else {
-        setLoginStatus("error");
-        triggerShake();
-      }
-    } else {
+    if (!result.success) {
       const newErrors: { [key: string]: string } = {};
       result.error.errors.forEach((error) => {
         newErrors[error.path[0]] = error.message;
       });
       setErrors(newErrors);
-      setLoginStatus("");
+      triggerShake();
+      return;
+    }
+    try {
+      const res = await loginUser(formData.username, formData.password);
+      if (res.success) {
+        setLoginStatus("success");
+        setErrors({});
+      } else {
+        setLoginStatus("error");
+        setErrors({ username: res.msg });
+        triggerShake();
+      }
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.msg || "Internal Server Error";
+      setErrors({ username: errorMsg });
+      setLoginStatus("error");
+      triggerShake();
     }
   };
 
   return (
     <div className="w-full h-screen bg-[#262626] overflow-hidden relative flex justify-center items-center font-[libre-caslon-text]">
-      
       <div className="z-10 flex flex-col items-center w-full max-w-md px-4">
         {loginStatus && (
           <div
@@ -93,8 +96,11 @@ const LogIn = () => {
           >
             <div className="w-full flex items-center justify-center gap-2 text-center py-2 px-4 rounded-xl text-black bg-white font-bold shadow-md">
               <div className="w-6 h-6 md:w-8 md:h-8 text-2xl items-center justify-center flex">
-                {loginStatus === "success" ? <MdOutlineHowToReg className="text-green-500" /> : <BsPersonXFill className="text-red-500 "/>}
-              
+                {loginStatus === "success" ? (
+                  <MdOutlineHowToReg className="text-green-500" />
+                ) : (
+                  <BsPersonXFill className="text-red-500 " />
+                )}
               </div>
               <span className="text-sm md:text-base">
                 {loginStatus === "success"
@@ -111,9 +117,7 @@ const LogIn = () => {
 
         <div className="w-full p-6 bg-white rounded-3xl shadow-lg">
           <div className="text-start mb-6">
-            <div className="text-black text-4xl font-bold">
-              Log In
-            </div>
+            <div className="text-black text-4xl font-bold">Log In</div>
           </div>
 
           <form onSubmit={handleSubmit}>
