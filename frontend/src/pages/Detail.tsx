@@ -1,84 +1,68 @@
+import axios from "axios";
 import Nav from "../components/NavBar";
-import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+
 
 export function Detail() {
-  const initialLyrics = `Now he's thinkin' 'bout me every night, oh
-Is it that sweet? I guess so
-Say you can't sleep, baby, I know
-That's that me espresso
-Move it up, down, left, right, oh
-Switch it up like Nintendo
-Say you can't sleep, baby, I know
-That's that me espresso
-I can't relate to desperation
-My give-a-fucks are on vacation
-And I got this one boy, and he won't stop callin'
-When they act this way, I know I got 'em
-Too bad your ex don't do it for ya
-Walked in and dream-came-trued it for ya
-Soft skin and I perfumed it for ya
-(Yes) I know, I Mountain Dew it for ya
-(Yes) that morning coffee, brewed it for ya
-(Yes) one touch and I brand-newed it for ya (oh)
-Now he's thinkin' 'bout me every night, oh
-Is it that sweet? I guess so
-Say you can't sleep, baby, I know
-That's that me espresso
-Move it up, down, left, right, oh
-Switch it up like Nintendo
-Say you can't sleep, baby, I know
-That's that me espresso
-Holy shit
-Is it that sweet? I guess so
-I'm working late, 'cause I'm a singer
-Oh, he looks so cute wrapped 'round my finger
-My twisted humor makes him laugh so often
-My honey bee, come and get this pollen
-Too bad your ex don't do it for ya
-Walked in and dream-came-trued it for ya
-Soft skin and I perfumed it for ya
-(Yes) I know, I Mountain Dew it for ya
-(Yes) that morning coffee, brewed it for ya
-(Yes) one touch and I brand-newed it for ya (stupid)
-Now he's thinkin' 'bout me every night, oh
-Is it that sweet? I guess so
-Say you can't sleep, baby, I know
-That's that me espresso
-Move it up, down, left, right, oh
-Switch it up like Nintendo
-Say you can't sleep, baby, I know
-That's that me espresso
-Thinkin' 'bout me every night, oh
-Is it that sweet? I guess so (yes)
-Say you can't sleep, baby, I know
-That's that me espresso (yes)
-Move it up, down, left, right, oh
-Switch it up like Nintendo (yes)
-Say you can't sleep, baby, I know
-That's that me espresso
-Is it that sweet? I guess so, uh
-That's that me espresso`;
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [lyrics, setLyrics] = useState("");
+  const [editedLyrics, setEditedLyrics] = useState("");
+  const [songName, setSongName] = useState("");
+  const [songAuthor, setSongAuthor] = useState("");
 
-    const [lyrics, setLyrics] = useState(() => {
-      return localStorage.getItem("lyrics") || initialLyrics;
-    });
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/songs/${id}`, {
+        withCredentials: true, 
+      })
+      .then((res) => {
+        console.log(res.data);    
+        setLyrics(res.data.SongLyrics);
+        setEditedLyrics(res.data.SongLyrics);
+        setSongName(res.data.SongName);
+        setSongAuthor(res.data.SongAuthor);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch lyrics:", err);
+      });
+  }, [id]);
 
-  const [editedLyrics, setEditedLyrics] = useState(() => {
-    return localStorage.getItem("lyrics") || initialLyrics;
-  });
 
-  const handleSave = () => {
-    setLyrics(editedLyrics);
-    localStorage.setItem("lyrics", editedLyrics);
-    console.log("✅ Saved to localStorage:", editedLyrics);
-  };
+const handleSave = () => {
+  axios
+    .put(
+      `http://localhost:3000/songs/${id}`,
+      {
+        SongLyrics: editedLyrics,
+      },
+      {
+        withCredentials: true,
+      }
+    )
 
-  const handleDelete = () => {
-    setLyrics("");
-    setEditedLyrics("");
-    localStorage.removeItem("lyrics");
-    console.log("🗑️ Deleted from localStorage");
-  };
+    .then(() => {
+      setLyrics(editedLyrics);
+      console.log("Lyrics updated");
+    })
+    .catch((err) => console.error("Failed to save:", err));
+};
+const handleDelete = () => {
+  axios
+    .delete(`http://localhost:3000/songs/${id}`, {
+      withCredentials: true,
+    })
+
+    .then(() => {
+      console.log("Deleted song ja");
+      navigate("/");
+    })
+    .catch((err) => console.error("Failed to delete:", err));
+};
+
+
 
   return (
     <>
@@ -94,10 +78,10 @@ That's that me espresso`;
                 <div className="Song details contet flex justify-between items-center ">
                   <div className=" gap-4 flex-col inline-flex items-start">
                     <div className="md:text-5xl text-4xl justify-start text-[#8B73A0] font-['Libre_Caslon_Text'] mt-9">
-                      Espresso
+                    {songName}
                     </div>
                     <div className="text-2xl md:text-3xl justify-start font-['Libre_Caslon_Text'] text-white  capitalize leading-normal">
-                      Sabrina Capanter
+                      {songAuthor}
                     </div>
                     <div className="md:text-3xl  text-2xl justify-start font-['Libre_Caslon_Text']  text-white  capitalize leading-normal">
                       lyrics provided by Belle

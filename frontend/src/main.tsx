@@ -11,8 +11,8 @@ import '../index.css'
 
 const router = createBrowserRouter([
   {
-    path: "/", 
-    element: <Home />, 
+    path: "/",
+    element: <Home />,
   },
   {
     path: "/register",
@@ -29,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/addnewsong",
     element: <AddNewSong />,
+  },
+  {
+    path: "/detail/:id",
+    element: <Detail />,
   },
 ]);
 

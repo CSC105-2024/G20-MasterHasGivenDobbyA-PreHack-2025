@@ -9,3 +9,4 @@ songsRouter.put('/edit', songController.editSongs);
 songsRouter.get('/search', songController.searchSongsByName);
 songsRouter.delete('/delete', songController.deleteSong);
 songsRouter.post('/create', songController.createSong);
+songsRouter.get("/:id", songController.getAllSongsById);

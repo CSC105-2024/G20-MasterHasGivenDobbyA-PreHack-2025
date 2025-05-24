@@ -139,7 +139,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/tanapoom/Desktop/Uni_Kmutt/Year1_2/CSC105/G20-MasterHasGivenDobbyA-PreHack-2025/backend/src/generated/prisma",
+      "value": "/Users/sudakarndonloei/Desktop/detailsongs/G20-MasterHasGivenDobbyA-PreHack-2025/backend/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -153,7 +153,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/tanapoom/Desktop/Uni_Kmutt/Year1_2/CSC105/G20-MasterHasGivenDobbyA-PreHack-2025/backend/prisma/schema.prisma",
+    "sourceFilePath": "/Users/sudakarndonloei/Desktop/detailsongs/G20-MasterHasGivenDobbyA-PreHack-2025/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

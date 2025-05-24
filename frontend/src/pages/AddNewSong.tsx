@@ -20,6 +20,7 @@ const handleDelete = () => {
 };
 
 useEffect(() => {
+  
   const savedLyrics = localStorage.getItem("lyrics");
   if (savedLyrics) {
     setLyrics(savedLyrics);
