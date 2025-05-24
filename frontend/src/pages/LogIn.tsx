@@ -19,15 +19,13 @@ const LogIn = () => {
 
   const triggerShake = () => {
     setShakeTrigger(false);
-    requestAnimationFrame(() => {
-      setShakeTrigger(true);
-    });
+    requestAnimationFrame(() => setShakeTrigger(true));
   };
 
   useEffect(() => {
     if (loginStatus === "success") {
       const timer = setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 1300);
       return () => clearTimeout(timer);
     }
@@ -48,6 +46,7 @@ const LogIn = () => {
     setErrors({});
 
     const result = userSchema.safeParse(formData);
+
     if (!formData.username.trim() && !formData.password.trim()) {
       setLoginStatus("empty");
       triggerShake();
@@ -63,11 +62,13 @@ const LogIn = () => {
       triggerShake();
       return;
     }
+
     try {
       const res = await loginUser(formData.username, formData.password);
       if (res.success) {
         setLoginStatus("success");
         setErrors({});
+        setFormData({ username: "", password: "" });
       } else {
         setLoginStatus("error");
         setErrors({ username: res.msg });
@@ -99,7 +100,7 @@ const LogIn = () => {
                 {loginStatus === "success" ? (
                   <MdOutlineHowToReg className="text-green-500" />
                 ) : (
-                  <BsPersonXFill className="text-red-500 " />
+                  <BsPersonXFill className="text-red-500" />
                 )}
               </div>
               <span className="text-sm md:text-base">
@@ -122,7 +123,7 @@ const LogIn = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-xl text-black font-normal ">
+              <label className="block text-xl text-black font-normal">
                 Username
               </label>
               <input
@@ -141,7 +142,7 @@ const LogIn = () => {
             </div>
 
             <div className="mb-6">
-              <label className="block text-xl text-black font-normal ">
+              <label className="block text-xl text-black font-normal">
                 Password
               </label>
               <input
@@ -178,4 +179,5 @@ const LogIn = () => {
     </div>
   );
 };
+
 export default LogIn;
