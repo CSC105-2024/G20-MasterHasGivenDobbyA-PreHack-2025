@@ -4,133 +4,134 @@ import { ConstructResponse } from '../utils/constructResponse.ts';
 import { db } from '../index.ts';
 
 export const getAllSongs = async (c: Context) => {
-    try {
-        const data = await songsModel.getAllSongs();
-        return c.json(
-            {
-                success: true,
-                data: data,
-            },
-            200
-        );
+  try {
+    const data = await songsModel.getAllSongs();
+    return c.json(
+      {
+        success: true,
+        data: data,
+      },
+      200
+    );
 
-    } catch (e) {
-        return c.json(
-            {
-                success: false,
-                data: null,
-                msg: `${e}`,
-            },
-            500
-        );
-    }
+  } catch (e) {
+    return c.json(
+      {
+        success: false,
+        data: null,
+        msg: `${e}`,
+      },
+      500
+    );
+  }
 };
 
 export const getAllSongsById = async (c: Context) => {
-    try {
-        const param = c.req.query("id");
-        if (!param) {
-            return c.json(
-                {
-                    success: false,
-                    data: null,
-                    msg: "Missing required field"
-                },
-                400
-            );
-        }
-
-        const data = await songsModel.getSongsById(parseInt(param));
-        return c.json(
-            {
-                success: true,
-                data: data,
-            },
-            200
-        );
-    } catch (e) {
-        return c.json(
-            {
-                success: false,
-                data: null,
-                msg: `${e}`,
-            },
-            500
-        );
+  try {
+    const param = c.req.query("id");
+    if (!param) {
+      return c.json(
+        {
+          success: false,
+          data: null,
+          msg: "Missing required field"
+        },
+        400
+      );
     }
+
+    const data = await songsModel.getSongsById(parseInt(param));
+    return c.json(
+      {
+        success: true,
+        data: data,
+      },
+      200
+    );
+  } catch (e) {
+    return c.json(
+      {
+        success: false,
+        data: null,
+        msg: `${e}`,
+      },
+      500
+    );
+  }
 };
 
 
 export const editSongs = async (c: Context) => {
-    try {
-        const param = c.req.query("id");
-        const { lyrics } = await c.req.json<{ lyrics: string }>();
+  try {
+    const param = c.req.query("id");
+    const { lyrics } = await c.req.json<{ lyrics: string }>();
 
-        if (!param || !lyrics) {
-            return c.json(
-                {
-                    success: false,
-                    data: null,
-                    msg: "Missing required fields"
-                },
-                400
-            );
-        }
-        const data = await songsModel.editSongs(parseInt(param), lyrics);
-        return c.json(
-            {
-                success: true,
-                data: data,
-                msg: "Edit lyrics successful",
-            },
-            200
-        );
-    } catch (e) {
-        return c.json(
-            {
-                success: true,
-                data: null,
-                msg: `${e}`,
-            },
-            500
-        );
+    if (!param || !lyrics) {
+      return c.json(
+        {
+          success: false,
+          data: null,
+          msg: "Missing required fields"
+        },
+        400
+      );
     }
+    const data = await songsModel.editSongs(parseInt(param), lyrics);
+    return c.json(
+      {
+        success: true,
+        data: data,
+        msg: "Edit lyrics successful",
+      },
+      200
+    );
+  } catch (e) {
+    return c.json(
+      {
+        success: true,
+        data: null,
+        msg: `${e}`,
+      },
+      500
+    );
+  }
 };
 
 export const searchSongsByName = async (c: Context) => {
-    try {
-        const param = c.req.query("keyword") || ''
+  try {
+    const param = c.req.query("keyword") || ''
 
-        if (!param.trim()) {
-            return c.json(
-                {
-                    success: false,
-                    data: null,
-                    msg: "Keyword is required",
-                },
-                400
-            );
-        }
-
-        const data = await songsModel.searchSongsByName(param);
-        return c.json(
-            {
-                success: true,
-                data: data,
-            },
-            200
-        );
-    } catch (e) {
-        return c.json(
-            {
-                success: false,
-                data: null,
-                msg: `${e}`,
-            },
-            500
-        );
+    if (!param.trim()) {
+      return c.json(
+        {
+          success: false,
+          data: null,
+          msg: "Keyword is required",
+        },
+        400
+      );
     }
+
+    const data = await songsModel.searchSongsByName(param);
+    return c.json(
+      {
+        success: true,
+        data: data,
+      },
+      200
+    );
+  } catch (e) {
+    return c.json(
+      {
+        success: false,
+        data: null,
+        msg: `${e}`,
+      },
+      500
+    );
+  }
 };
+
 
 export const deleteSong = async (c: Context) => {
     try {
@@ -162,33 +163,40 @@ export const deleteSong = async (c: Context) => {
 }
 
 type createBody = {
-    songName: string,
-    songLyrics: string,
+  songName: string,
+  songLyrics: string,
 }
 
 export const createSong = async(c: Context) => {
-    try{
-        const userId = c.get("userId");
-        const body = await c.req.json<createBody>();
+  try{
+    const userId = c.get("userId");
+    const body = await c.req.json<{
+      songName: string;
+      songLyrics: string;
+      songAuthor: string;
+    }>();
 
-        if(!body || !body.songName || !body.songLyrics) {
-            return c.json(ConstructResponse(false, "Missing Required fields"), 400)
-        }
-
-        const authors = await db.user.findUnique({
-            where: {
-                UserId: userId,
-            }
-        })
-
-        if(!authors) {
-            return c.json(ConstructResponse(false, "Missing requires fields"), 404)
-        }
-
-        const data = await songsModel.createSong(body.songName, body.songLyrics, authors.UserName , userId);
-        return c.json(ConstructResponse(true, "Create song Successful!", data), 200);
-
-    } catch(e) {
-        return c.json(ConstructResponse(false, `${e}`), 500);
+    if (!body.songName || !body.songLyrics || !body.songAuthor) {
+      return c.json(ConstructResponse(false, "Missing required fields"), 400);
     }
-}
+
+    const user = await db.user.findUnique({
+      where: { UserId: userId },
+    });
+
+    if (!user) {
+      return c.json(ConstructResponse(false, "User not found"), 404);
+    }
+
+    const newSong = await songsModel.createSong(
+      body.songName,
+      body.songLyrics,
+      body.songAuthor,
+      userId
+    );
+
+    return c.json(ConstructResponse(true, "Song created", newSong), 200);
+  } catch (e) {
+    return c.json(ConstructResponse(false, "Internal Server Error", e), 500);
+  }
+};
