@@ -139,7 +139,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/tanapoom/Desktop/Uni_Kmutt/Year1_2/CSC105/G20-MasterHasGivenDobbyA-PreHack-2025/backend/src/generated/prisma",
+      "value": "/Users/pornchanokphuaktao/Desktop/G20-MasterHasGivenDobbyA-PreHack-2025/backend/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -153,7 +153,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/tanapoom/Desktop/Uni_Kmutt/Year1_2/CSC105/G20-MasterHasGivenDobbyA-PreHack-2025/backend/prisma/schema.prisma",
+    "sourceFilePath": "/Users/pornchanokphuaktao/Desktop/G20-MasterHasGivenDobbyA-PreHack-2025/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -167,7 +167,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -176,8 +176,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider          = \"mysql\"\n  url               = env(\"DATABASE_URL\")\n  shadowDatabaseUrl = env(\"SHADOW_DATABASE_URL\")\n}\n\nmodel User {\n  UserId       Int     @id @default(autoincrement())\n  UserName     String\n  UserPassword String\n  Songs        Songs[]\n}\n\nmodel Songs {\n  SongName   String\n  SongId     Int    @id @default(autoincrement())\n  SongLyrics String\n  SongAuthor String\n  UserId     Int\n  user       User   @relation(fields: [UserId], references: [UserId])\n}\n",
-  "inlineSchemaHash": "40c71a8005ceb4194a258e15dabee33d6679cc695b80aac7b1fcae72607b18c1",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider          = \"mysql\"\n  url               = env(\"DATABASE_URL\")\n  shadowDatabaseUrl = env(\"SHADOW_DATABASE_URL\")\n}\n\nmodel User {\n  UserId       Int     @id @default(autoincrement())\n  UserName     String\n  UserPassword String\n  Songs        Songs[]\n}\n\nmodel Songs {\n  SongName   String\n  SongId     Int    @id @default(autoincrement())\n  SongLyrics String\n  SongAuthor String\n  UserId     Int\n  user       User   @relation(fields: [UserId], references: [UserId])\n\n  @@index([UserId], map: \"Songs_UserId_fkey\")\n}\n",
+  "inlineSchemaHash": "4eb20564bad8834316d81e37d2957fe9373c5fcc3dbf568e4510ad5c9d6bc67c",
   "copyEngine": true
 }
 

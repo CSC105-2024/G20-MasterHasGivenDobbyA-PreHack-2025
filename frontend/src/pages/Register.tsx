@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineHowToReg } from "react-icons/md";
 import { BsPersonXFill } from "react-icons/bs";
+import { registerUser } from "../api/userApi";
 
 const registerSchema = z
   .object({
@@ -52,45 +53,36 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const isUsernameEmpty = !formData.username.trim();
-    const isPasswordEmpty = !formData.password.trim();
-    const isConfirmPasswordEmpty = !formData.confirmPassword.trim();
-
-    if (isUsernameEmpty && isPasswordEmpty && isConfirmPasswordEmpty) {
-      setRegisterStatus("empty");
-      setErrors({});
-      triggerShake();
-      return;
-    }
-
-    const fieldErrors: { [key: string]: string } = {};
-    if (isUsernameEmpty) fieldErrors.username = "Username is required";
-    if (isPasswordEmpty) fieldErrors.password = "Password is required";
-    if (isConfirmPasswordEmpty)
-      fieldErrors.confirmPassword = "Please confirm your password";
-
-    if (Object.keys(fieldErrors).length > 0) {
-      setErrors(fieldErrors);
-      setRegisterStatus("error");
-      triggerShake();
-      return;
-    }
-
     const result = registerSchema.safeParse(formData);
-
-    if (result.success) {
-      setRegisterStatus("success");
-      setErrors({});
-    } else {
+    if (!result.success) {
       const newErrors: { [key: string]: string } = {};
-      result.error.errors.forEach((error) => {
-        newErrors[error.path[0] as string] = error.message;
+      result.error.errors.forEach((err) => {
+        newErrors[err.path[0] as string] = err.message;
       });
       setErrors(newErrors);
       setRegisterStatus("error");
+      triggerShake();
+      return;
+    }
+
+    try {
+      const res = await registerUser(formData.username, formData.password);
+      if (res.success) {
+        setRegisterStatus("success");
+        setErrors({});
+      } else {
+        setRegisterStatus("error");
+        setErrors({ username: res.msg });
+        triggerShake();
+      }
+    } catch (err: any) {
+      console.error("🔥 Register failed:", err.response?.data || err.message);
+      const errorMsg = err.response?.data?.msg || "Something went wrong";
+      setRegisterStatus("error");
+      setErrors({ username: errorMsg });
       triggerShake();
     }
   };

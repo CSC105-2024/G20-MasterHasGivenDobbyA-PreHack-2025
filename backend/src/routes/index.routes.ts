@@ -6,8 +6,8 @@ import { AuthMiddleWare } from "../middlewares/auth.ts";
 
 export const mainRouter = new Hono();
 
-mainRouter.route('/user', userRouter);
-mainRouter.route('/auth', AuthRouter)
+mainRouter.route("/user", userRouter);
+mainRouter.route("/auth", AuthRouter);
 
-mainRouter.use(AuthMiddleWare)
-mainRouter.route('/song', songsRouter);
+mainRouter.use("/song/*", AuthMiddleWare);
+mainRouter.route("/song", songsRouter);
