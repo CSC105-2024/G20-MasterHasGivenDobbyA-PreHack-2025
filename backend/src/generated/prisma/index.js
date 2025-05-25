@@ -139,7 +139,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/pornchanokphuaktao/Desktop/G20-MasterHasGivenDobbyA-PreHack-2025/backend/src/generated/prisma",
+      "value": "/Users/pornchanokphuaktao/Desktop/G20-MasterHasGivenDobbyA-PreHack-2025-1/backend/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -153,7 +153,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/pornchanokphuaktao/Desktop/G20-MasterHasGivenDobbyA-PreHack-2025/backend/prisma/schema.prisma",
+    "sourceFilePath": "/Users/pornchanokphuaktao/Desktop/G20-MasterHasGivenDobbyA-PreHack-2025-1/backend/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -167,7 +167,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
