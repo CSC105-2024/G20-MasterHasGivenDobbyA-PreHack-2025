@@ -8,8 +8,8 @@ export const registerUser = async (username: string, password: string) => {
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    throw error;
+  } catch (e: any) {
+    throw e;
   }
 };
 
@@ -21,7 +21,7 @@ export const loginUser = async (username: string, password: string) => {
       { withCredentials: true }
     );
     return response.data;
-  } catch (error: any) {
-    throw error;
+  } catch (e: any) {
+    throw e;
   }
 };

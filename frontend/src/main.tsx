@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/detail",
+    path: "/detail/:id",
     element: (
       <ProtectedRoute>
         <Detail />

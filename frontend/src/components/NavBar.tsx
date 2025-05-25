@@ -22,10 +22,10 @@ export default function NavBar() {
         <FaUserCircle />
       </button>
       {dropdownProfileOpen && (
-        <div className="absolute mt-22 right-1 md:left-16 md:mb-4 w-40 md:bottom-0 bg-white shadow-lg rounded-lg overflow-hidden z-[9999]">
+        <div className="absolute mt-22 right-1 md:left-16 md:mb-4 w-40 md:bottom-0 hover:bg-gray-200 text-black bg-white shadow-lg rounded-lg overflow-hidden z-[9999]">
           <button
             onClick={handleLogout}
-            className="block px-4 py-2 text-gray-700 hover:bg-[#95B9FF] hover:text-white transition"
+            className="block px-4 py-2 text-gray-700 transition"
           >
             Log Out
           </button>
