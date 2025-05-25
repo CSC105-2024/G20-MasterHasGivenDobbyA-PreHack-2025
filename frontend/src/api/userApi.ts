@@ -1,4 +1,4 @@
-import { Axios } from "../utils/axiosInstance";
+import Axios from "../utils/axiosInstance";
 
 export const registerUser = async (username: string, password: string) => {
   try {

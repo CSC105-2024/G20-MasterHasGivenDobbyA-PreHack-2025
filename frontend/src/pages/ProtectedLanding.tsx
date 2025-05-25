@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Axios } from "../utils/axiosInstance";
+import Axios from "../utils/axiosInstance";
 
 export default function ProtectedLanding() {
   const navigate = useNavigate();

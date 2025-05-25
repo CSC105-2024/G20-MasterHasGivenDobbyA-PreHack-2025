@@ -1,9 +1,7 @@
-import axios from "axios";
+import Axios from "../utils/axiosInstance";
 import Nav from "../components/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-
 
 export function Detail() {
   const { id } = useParams();
@@ -14,12 +12,11 @@ export function Detail() {
   const [songAuthor, setSongAuthor] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/songs/${id}`, {
-        withCredentials: true, 
-      })
+    Axios.get(`http://localhost:3000/songs/${id}`, {
+      withCredentials: true,
+    })
       .then((res) => {
-        console.log(res.data);    
+        console.log(res.data);
         setLyrics(res.data.SongLyrics);
         setEditedLyrics(res.data.SongLyrics);
         setSongName(res.data.SongName);
@@ -30,10 +27,8 @@ export function Detail() {
       });
   }, [id]);
 
-
-const handleSave = () => {
-  axios
-    .put(
+  const handleSave = () => {
+    Axios.put(
       `http://localhost:3000/songs/${id}`,
       {
         SongLyrics: editedLyrics,
@@ -43,26 +38,23 @@ const handleSave = () => {
       }
     )
 
-    .then(() => {
-      setLyrics(editedLyrics);
-      console.log("Lyrics updated");
-    })
-    .catch((err) => console.error("Failed to save:", err));
-};
-const handleDelete = () => {
-  axios
-    .delete(`http://localhost:3000/songs/${id}`, {
+      .then(() => {
+        setLyrics(editedLyrics);
+        console.log("Lyrics updated");
+      })
+      .catch((err) => console.error("Failed to save:", err));
+  };
+  const handleDelete = () => {
+    Axios.delete(`http://localhost:3000/songs/${id}`, {
       withCredentials: true,
     })
 
-    .then(() => {
-      console.log("Deleted song ja");
-      navigate("/");
-    })
-    .catch((err) => console.error("Failed to delete:", err));
-};
-
-
+      .then(() => {
+        console.log("Deleted song ja");
+        navigate("/");
+      })
+      .catch((err) => console.error("Failed to delete:", err));
+  };
 
   return (
     <>
@@ -78,7 +70,7 @@ const handleDelete = () => {
                 <div className="Song details contet flex justify-between items-center ">
                   <div className=" gap-4 flex-col inline-flex items-start">
                     <div className="md:text-5xl text-4xl justify-start text-[#8B73A0] font-['Libre_Caslon_Text'] mt-9">
-                    {songName}
+                      {songName}
                     </div>
                     <div className="text-2xl md:text-3xl justify-start font-['Libre_Caslon_Text'] text-white  capitalize leading-normal">
                       {songAuthor}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Nav from "../components/NavBar";
-import { Axios } from "../utils/axiosInstance";
+import Axios from "../utils/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 function AddNewSong() {
