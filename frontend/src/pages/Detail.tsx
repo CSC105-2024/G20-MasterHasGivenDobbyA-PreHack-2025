@@ -1,130 +1,213 @@
-import Axios from "../utils/axiosInstance";
+import { Axios } from "../utils/axiosInstance";
 import Nav from "../components/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 
 export function Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [lyrics, setLyrics] = useState("");
   const [editedLyrics, setEditedLyrics] = useState("");
-  const [songName, setSongName] = useState("");
-  const [songAuthor, setSongAuthor] = useState("");
+  const [song, setSong] = useState<any>({});
+  const [isEditing, setIsEditing] = useState(false);
+  const [username, setUsername] = useState<string>("");
+  const [myUserId, setMyUserId] = useState<number | null>(null);
+  const [query, setQuery] = useState("");
+  const [allSongs, setAllSongs] = useState<any[]>([]);
+  const [result, setResult] = useState<any[]>([]);
 
   useEffect(() => {
-    Axios.get(`http://localhost:3000/songs/${id}`, {
-      withCredentials: true,
-    })
-      .then((res) => {
-        console.log(res.data);
-        setLyrics(res.data.SongLyrics);
-        setEditedLyrics(res.data.SongLyrics);
-        setSongName(res.data.SongName);
-        setSongAuthor(res.data.SongAuthor);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch lyrics:", err);
-      });
+    const fetchData = async () => {
+      if (!id) return;
+
+      try {
+        const resSong = await Axios.get(`/song/getsongbyid?id=${id}`);
+        const songData = resSong.data.data;
+        setSong(songData);
+        setEditedLyrics(songData.songLyrics);
+
+        const resUser = await Axios.get(`/user/getuser?id=${songData.UserId}`);
+        setUsername(resUser.data.UserName);
+
+        const resMe = await Axios.get("/user/me", { withCredentials: true });
+        setMyUserId(resMe.data.data.id);
+      } catch (e) {
+        console.error(" Error fetching song or user:", e);
+      }
+    };
+    fetchData();
   }, [id]);
 
-  const handleSave = () => {
-    Axios.put(
-      `http://localhost:3000/songs/${id}`,
-      {
-        SongLyrics: editedLyrics,
-      },
-      {
-        withCredentials: true,
+  useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const res = await Axios.get("/song/getallsongs");
+        setAllSongs(res.data.data);
+      } catch (e) {
+        console.error("Failed to fetch songs:", e);
       }
-    )
+    };
 
-      .then(() => {
-        setLyrics(editedLyrics);
-        console.log("Lyrics updated");
-      })
-      .catch((err) => console.error("Failed to save:", err));
+    fetchSongs();
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (query.trim() === "") {
+        setResult([]);
+        return;
+      }
+      const matched = allSongs.filter(
+        (song) =>
+          song.SongName.toLowerCase().includes(query.toLowerCase()) ||
+          song.SongAuthor.toLowerCase().includes(query.toLowerCase())
+      );
+      setResult(matched);
+    } catch (e) {
+      console.error("Error filtering songs:", e);
+    }
+  }, [query, allSongs]);
+
+  const handleSave = async () => {
+    try {
+      await Axios.put(`/song/edit?id=${id}`, {
+        lyrics: editedLyrics,
+      });
+      setSong({ ...song, SongLyrics: editedLyrics });
+      setIsEditing(false);
+      console.log("saving successfully");
+    } catch (e) {
+      console.error(" Error saving:", e);
+    }
   };
-  const handleDelete = () => {
-    Axios.delete(`http://localhost:3000/songs/${id}`, {
-      withCredentials: true,
-    })
 
-      .then(() => {
-        console.log("Deleted song ja");
-        navigate("/");
-      })
-      .catch((err) => console.error("Failed to delete:", err));
+  const handleDelete = async () => {
+    try {
+      await Axios.delete(`/song/delete?id=${id}`, { withCredentials: true });
+      console.log("delete successfully");
+      navigate("/home");
+    } catch (e) {
+      console.error(" Error delete", e);
+    }
   };
 
   return (
-    <>
-      <div className="min-h-screen flex md:flex-row flex-row font-libre-caslon-text">
-        <div>
-          <Nav />
-        </div>
+    <div className="min-h-screen flex md:flex-row flex-col font-libre-caslon-text">
+      <Nav />
+      <div className="bg-neutral-800 flex-1 w-full px-4 py-6">
+        <div className="flex flex-col items-start w-full max-w-[1024px] mx-auto">
+          <div className="mb-6">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-4xl md:text-5xl text-[#8B73A0]">
+                {song.SongName}
+              </h1>
+              <p className="text-2xl md:text-3xl text-white">
+                {song.SongAuthor}
+              </p>
+              <p className="text-2xl md:text-3xl text-white">
+                Lyrics provided by {username}
+              </p>
+            </div>
+          </div>
 
-        <div className="bg-neutral-800 flex-1 w-full min-h-svh ">
-          <div className=" Make it center flex justify-center  px-4">
-            <div className=" All content flex flex-col items-start w-full max-w-[1024px]">
-              <div className="mt-18 mb-6 md:mt-4">
-                <div className="Song details contet flex justify-between items-center ">
-                  <div className=" gap-4 flex-col inline-flex items-start">
-                    <div className="md:text-5xl text-4xl justify-start text-[#8B73A0] font-['Libre_Caslon_Text'] mt-9">
-                      {songName}
-                    </div>
-                    <div className="text-2xl md:text-3xl justify-start font-['Libre_Caslon_Text'] text-white  capitalize leading-normal">
-                      {songAuthor}
-                    </div>
-                    <div className="md:text-3xl  text-2xl justify-start font-['Libre_Caslon_Text']  text-white  capitalize leading-normal">
-                      lyrics provided by Belle
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full mb-4">
+            <div className="flex flex-grow items-center bg-gray-50 border border-gray-300 text-sm rounded-lg p-3 shadow-sm">
+              <input
+                className="flex-grow text-lg font-[libre-caslon-text] bg-transparent focus:outline-none"
+                placeholder="Search for song name, artist name"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button className="text-3xl text-gray-400 hover:bg-gray-200 rounded-lg px-2">
+                <CiSearch />
+              </button>
+            </div>
 
-              <div className="Search song flex-col md:flex-row  md:items-center justify-center items-center  w-full py-5">
-                <div className=" flex items-start gap-4">
-                  <div className="w-full md:w-[500px]  h-[50px] bg-white backdrop-blur-md rounded-lg shadow-md outline-[0.5px] outline-black flex items-center px-4 ">
-                    <input
-                      type="search"
-                      placeholder="Search for Name"
-                      className="w-full h-full bg-transparent focus:outline-none"
-                    />
-                  </div>
+            <div className="flex flex-row gap-3 flex-shrink-0">
+              {isEditing ? (
+                <button
+                  className="text-white bg-purple-900 hover:bg-[#8B73A0] px-4 py-2 rounded-2xl text-lg"
+                  onClick={handleSave}
+                >
+                  Save
+                </button>
+              ) : (
+                <button
+                  className="text-white bg-purple-900 hover:bg-[#8B73A0] px-4 py-2 h-14 rounded-2xl text-lg"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit
+                </button>
+              )}
+              {myUserId === song.UserId && (
+                <button
+                  onClick={handleDelete}
+                  className="text-purple-900 bg-zinc-300 hover:bg-[#8B73A0] h-14 hover:text-white px-4 py-2 rounded-2xl text-lg"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          </div>
 
-                  <div className="flex gap-3">
+          {query && (
+            <div className="relative w-full">
+              <div className="absolute top-0 w-full max-h-[300px] overflow-y-auto bg-white rounded-xl p-3 shadow-xl border border-gray-300 z-50">
+                {result.length > 0 ? (
+                  result.map((song) => (
                     <button
-                      onClick={handleDelete}
-                      className=" text-purple-900 flex items-center justify-center bg-zinc-400 w-28 h-[50px] px-8 py-3.5 rounded-2xl text-2xl"
+                      key={song.SongId}
+                      onClick={() => navigate(`/detail/${song.SongId}`)}
+                      className="text-left group w-full mb-3"
                     >
-                      Delete
+                      <div className="w-full flex flex-col sm:flex-row gap-2 text-base sm:text-lg">
+                        <div className="text-[#8B73A0] group-hover:text-[#491C70] truncate">
+                          {song.SongName}
+                        </div>
+                        <div className="text-gray-400 group-hover:text-[#491C70] truncate">
+                          by {song.SongAuthor}
+                        </div>
+                      </div>
                     </button>
-
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-2 w-full h-full">
+                    <p className="text-black text-lg font-semibold">
+                      Music Not Found
+                    </p>
                     <button
-                      className="text-white flex items-center bg-purple-900 w-28 h-[50px] px-8 py-3.5 rounded-2xl hover:bg-gray-200 text-2xl"
-                      onClick={handleSave}
+                      onClick={() => navigate("/addnewsong")}
+                      className="text-sm text-white px-4 py-2 bg-[#491C70] hover:bg-gray-500 rounded-xl"
                     >
-                      Save
+                      Add New Song
                     </button>
                   </div>
-                </div>
+                )}
               </div>
+            </div>
+          )}
 
-              <div className="Lyrics bg-white rounded-3xl w-full h-[55vh] md:h-[550px]  overflow-y-auto p-6 mt-6">
-                <div className="flex justify-center items-center w-full h-full">
-                  <textarea
-                    value={editedLyrics}
-                    onChange={(e) => setEditedLyrics(e.target.value)}
-                    className="w-[750px] h-full resize-none bg-transparent outline-none text-3xl leading-relaxed font-['Libre_Caslon_Text'] p-2 whitespace-pre-wrap"
-                    placeholder="Type your lyrics here..."
-                  />
-                </div>
-              </div>
+          <div className="Lyrics bg-white rounded-3xl w-full h-[50vh] md:h-[500px] overflow-y-auto p-6 mt-6">
+            <div className="flex justify-center items-center w-full h-full">
+              {isEditing ? (
+                <textarea
+                  value={editedLyrics}
+                  onChange={(e) => setEditedLyrics(e.target.value)}
+                  className="h-full w-full resize-none bg-transparent outline-none text-2xl md:text-3xl leading-relaxed font-['Libre_Caslon_Text'] p-2 whitespace-pre-wrap"
+                  placeholder="Type your lyrics here..."
+                />
+              ) : (
+                <textarea
+                  value={song.SongLyrics}
+                  className="h-full w-full resize-none bg-transparent outline-none text-2xl md:text-3xl leading-relaxed font-['Libre_Caslon_Text'] p-2 whitespace-pre-wrap"
+                  readOnly
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

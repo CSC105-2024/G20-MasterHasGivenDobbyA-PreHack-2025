@@ -44,38 +44,36 @@ export const Register = async (c: Context) => {
 };
 
 export const Login = async (c: Context) => {
-  try {
-    const body = await c.req.json<LoginPayload>();
+    try {
+        const body = await c.req.json<LoginPayload>();
 
-    if (!body.username || !body.password)
-      return c.json(ConstructResponse(false, "Missing Required field"), 400);
+        if (!body.username || !body.password) return c.json(ConstructResponse(false, "Missing Required field"), 400)
 
-    const user = await userModel.getUserByUsername(body.username);
-    if (!user) return c.json(ConstructResponse(false, "User not found"), 400);
+        const user = await userModel.getUserByUsername(body.username);
 
-    const isPasswordMatch = await bcrypt.compare(
-      body.password,
-      user.UserPassword
-    );
-    if (!isPasswordMatch)
-      return c.json(ConstructResponse(false, "Incorrect Password"), 400);
+        if (!user) return c.json(ConstructResponse(false, "User not found"), 400)
 
-    const jwtPayload = { id: user.UserId };
-    const SECRET = process.env.JWT_SECRET;
-    if (!SECRET) throw new Error("Missing JWT_SECRET in .env file");
+        const isPasswordMatch = await bcrypt.compare(body.password, user.UserPassword);
 
-    const token = await jwt.sign(jwtPayload, SECRET);
-    setCookie(c, "authToken", token, {
-      path: "/",
-      httpOnly: true,
-      secure: false,
-      maxAge: 60 * 60 * 24,
-      sameSite: "lax",
-    });
+        if (!isPasswordMatch) return c.json(ConstructResponse(false, "Incorrect Password"), 400)
 
-    return c.json(ConstructResponse(true, "Login Success!"), 200);
-  } catch (e) {
-    console.log(e);
-    return c.json(ConstructResponse(false, "Internal Server Error", e), 500);
-  }
-};
+        const jwtPayload = {
+            id: user.UserId
+        }
+
+        const SECRET = process.env.JWT_SECRET;
+
+        if (!SECRET) throw new Error("Missing JWT_SECRET in .env file")
+
+        const token = await jwt.sign(jwtPayload, SECRET)
+
+        setCookie(c, "authToken", token)
+
+        return c.json(ConstructResponse(true, "Login Success!"), 200)
+
+    } catch (e) {
+        console.log(e);
+
+        return c.json(ConstructResponse(false, `Internal Server Error`, e), 500)
+    }
+}

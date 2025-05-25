@@ -6,12 +6,20 @@ export default function ProtectedLanding() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get("/user/me", { withCredentials: true })
-      .then((res) => {
-        if (res.data.success) navigate("/home");
-        else navigate("/login");
-      })
-      .catch(() => navigate("/login"));
+    const checkLogin = async () => {
+      try {
+        const res = await Axios.get("/user/me", { withCredentials: true });
+        if (res.data.success) {
+          navigate("/home");
+        } else {
+          navigate("/login");
+        }
+      } catch (e) {
+        navigate("/login");
+      }
+    };
+
+    checkLogin();
   }, [navigate]);
 
   return null;

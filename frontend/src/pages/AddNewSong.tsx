@@ -11,11 +11,15 @@ function AddNewSong() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get("/user/me", { withCredentials: true })
-      .then((res) => {
+    const fetchUser = async () => {
+      try {
+        const res = await Axios.get("/user/me", { withCredentials: true });
         setUsername(res.data.data.username);
-      })
-      .catch((err) => console.error("Failed to fetch user:", err));
+      } catch (e) {
+        console.error(" Failed to fetch user:", e);
+      }
+    };
+    fetchUser();
   }, []);
 
   const handleSave = async () => {
@@ -53,15 +57,12 @@ function AddNewSong() {
             <input
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
-              placeholder="Author"
+              placeholder="Artist"
               className="text-2xl md:text-3xl text-white bg-transparent font-semibold outline-none"
             />
-            <input
-              value={username}
-              readOnly
-              placeholder="Lyrics provided by"
-              className="text-2xl md:text-3xl text-white bg-transparent font-semibold outline-none"
-            />
+            <div className="text-2xl md:text-3xl text-white bg-transparent font-semibold outline-none">
+              Lyrics provided by {username}
+            </div>
           </div>
 
           <div className="flex justify-start gap-3 w-full py-4">

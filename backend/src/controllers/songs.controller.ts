@@ -1,7 +1,7 @@
-import * as songsModel from '../models/songs.model.ts'
-import type { Context } from 'hono'
-import { ConstructResponse } from '../utils/constructResponse.ts';
-import { db } from '../index.ts';
+import * as songsModel from "../models/songs.model.ts";
+import type { Context } from "hono";
+import { ConstructResponse } from "../utils/constructResponse.ts";
+import { db } from "../index.ts";
 
 export const getAllSongs = async (c: Context) => {
   try {
@@ -13,8 +13,8 @@ export const getAllSongs = async (c: Context) => {
       },
       200
     );
-
-  } catch (e) {
+    
+    } catch (e) {
     return c.json(
       {
         success: false,
@@ -34,7 +34,7 @@ export const getAllSongsById = async (c: Context) => {
         {
           success: false,
           data: null,
-          msg: "Missing required field"
+          msg: "Missing required field",
         },
         400
       );
@@ -60,18 +60,17 @@ export const getAllSongsById = async (c: Context) => {
   }
 };
 
-
 export const editSongs = async (c: Context) => {
   try {
     const param = c.req.query("id");
     const { lyrics } = await c.req.json<{ lyrics: string }>();
 
-    if (!param || !lyrics) {
+    if (!param) {
       return c.json(
         {
           success: false,
           data: null,
-          msg: "Missing required fields"
+          msg: "Missing required fields",
         },
         400
       );
@@ -99,7 +98,7 @@ export const editSongs = async (c: Context) => {
 
 export const searchSongsByName = async (c: Context) => {
   try {
-    const param = c.req.query("keyword") || ''
+    const param = c.req.query("keyword") || "";
 
     if (!param.trim()) {
       return c.json(
@@ -132,43 +131,46 @@ export const searchSongsByName = async (c: Context) => {
   }
 };
 
-
 export const deleteSong = async (c: Context) => {
-    try {
-        const userId = c.get("userId");
-        const songId = parseInt(c.req.query("id") || '');
+  try {
+    const userId = c.get("userId");
+    const songId = parseInt(c.req.query("id") || "");
 
-        console.log(userId);
-        
+    console.log(userId);
 
-        if (!userId || isNaN(songId)) {
-            return c.json(ConstructResponse(false, "userId or songId is required"), 400);
-        }
-
-        if(!await songsModel.getSongsById(songId)) {
-            return c.json(ConstructResponse(false, "Music not found"), 400);
-        }
-        
-        const deleted = await songsModel.deleteSongs(userId, songId);
-
-        if(!deleted) {
-            return c.json(ConstructResponse(false, "You are not authorize or Song not found"), 400)
-        }
-
-        return c.json(ConstructResponse(true, "Delete Successful", deleted), 200);
-
-    } catch (e) {
-        return c.json(ConstructResponse(false, "Internal Server Error"), 500);
+    if (!userId || isNaN(songId)) {
+      return c.json(
+        ConstructResponse(false, "userId or songId is required"),
+        400
+      );
     }
-}
+
+    if (!(await songsModel.getSongsById(songId))) {
+      return c.json(ConstructResponse(false, "Music not found"), 400);
+    }
+
+    const deleted = await songsModel.deleteSongs(userId, songId);
+
+    if (!deleted) {
+      return c.json(
+        ConstructResponse(false, "You are not authorize or Song not found"),
+        400
+      );
+    }
+
+    return c.json(ConstructResponse(true, "Delete Successful", deleted), 200);
+  } catch (e) {
+    return c.json(ConstructResponse(false, "Internal Server Error"), 500);
+  }
+};
 
 type createBody = {
-  songName: string,
-  songLyrics: string,
-}
+  songName: string;
+  songLyrics: string;
+};
 
-export const createSong = async(c: Context) => {
-  try{
+export const createSong = async (c: Context) => {
+  try {
     const userId = c.get("userId");
     const body = await c.req.json<{
       songName: string;

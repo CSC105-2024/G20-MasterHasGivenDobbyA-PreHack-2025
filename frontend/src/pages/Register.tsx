@@ -53,7 +53,7 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = registerSchema.safeParse(formData);
@@ -78,9 +78,9 @@ const Register = () => {
         setErrors({ username: res.msg });
         triggerShake();
       }
-    } catch (err: any) {
-      console.error("🔥 Register failed:", err.response?.data || err.message);
-      const errorMsg = err.response?.data?.msg || "Something went wrong";
+    } catch (e: any) {
+      console.error("Register failed:", e.response?.data || e.message);
+      const errorMsg = e.response?.data?.msg || "Something went wrong";
       setRegisterStatus("error");
       setErrors({ username: errorMsg });
       triggerShake();
@@ -150,9 +150,7 @@ const Register = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-xl text-black">
-                Password
-              </label>
+              <label className="block text-xl text-black">Password</label>
               <input
                 type="password"
                 name="password"
@@ -187,7 +185,7 @@ const Register = () => {
               )}
             </div>
 
-           <button
+            <button
               type="submit"
               className="w-full py-4 bg-[#491C70] hover:bg-gray-500 text-white text-2xl rounded-2xl"
             >

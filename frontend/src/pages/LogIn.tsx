@@ -74,8 +74,8 @@ const LogIn = () => {
         setErrors({ username: res.msg });
         triggerShake();
       }
-    } catch (err: any) {
-      const errorMsg = err.response?.data?.msg || "Internal Server Error";
+    } catch (e: any) {
+      const errorMsg = e.response?.data?.msg || "Internal Server Error";
       setErrors({ username: errorMsg });
       setLoginStatus("error");
       triggerShake();
