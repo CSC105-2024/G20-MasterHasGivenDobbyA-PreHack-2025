@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { CiSearch } from "react-icons/ci";
-import { Axios } from "../utils/axiosInstance";
+import  Axios  from "../utils/axiosInstance";
 
 export default function Home() {
   const [query, setQuery] = useState("");

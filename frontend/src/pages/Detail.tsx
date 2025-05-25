@@ -1,4 +1,4 @@
-import { Axios } from "../utils/axiosInstance";
+import Axios from "../utils/axiosInstance";
 import Nav from "../components/NavBar";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
