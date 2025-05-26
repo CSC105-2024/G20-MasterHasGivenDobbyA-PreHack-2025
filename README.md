@@ -15,7 +15,7 @@ _Our project is a website for users to find song lyrics easily ,User can search 
    ```
 
 ---
-## :round_pushpin: - Alternative for running the server
+## :round_pushpin: Alternative for running the server
 
 - Run Front-end only:
   ```bash
