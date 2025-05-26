@@ -34,8 +34,9 @@ function AddNewSong() {
         { withCredentials: true }
       );
       console.log("Song created:", response.data);
+      const songId = response.data.data.SongId;
       alert("Song saved successfully!");
-      navigate("/home");
+      navigate(`/detail/${songId}`);
     } catch (e) {
       console.error("Failed to save song:", e);
       alert("Failed to save song.");
