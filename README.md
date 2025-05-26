@@ -123,7 +123,7 @@ _Our project is a website for users to find song lyrics easily ,User can search 
 
    SHADOW_DATABASE_URL="mysql://user20:y6cMhAfkiK6i@cshackathon.sit.kmutt.ac.th:3306/group20_prehack_shadow"
 
-   JWT_SECRET="974e96071630764a65667643433153c60a9e33e33a4319eb1468273a8b496b0d"
+   JWT_SECRET="You can generate JWT secret key at https://jwtsecret.com/generate"
    ```
 
 4. Start the development server:
