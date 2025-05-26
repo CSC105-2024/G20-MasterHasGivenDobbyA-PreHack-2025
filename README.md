@@ -69,6 +69,7 @@ _Our project is a website for users to find song lyrics easily ,User can search 
 - Node.js
 - Hono
 - MySQL
+- Prisma
 - Bcrypt
 - JWT
 
